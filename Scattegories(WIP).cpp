@@ -13,7 +13,6 @@ using std::this_thread::sleep_for;
 
 void ltr()    //gives a random letter
 {
-	srand(time(NULL));    //gives a differant pattern every time
 	char letter;
 	letter = rand() % 26 + 65;         //assigns a random letter in ascii code to a char (resulting in a random letter)
 	cout << "The letter is " << letter << "\n";
@@ -22,30 +21,26 @@ void ltr()    //gives a random letter
 void timer()
 {
 	cout << "You got 1.5 minutes to finish\n";    //Changing the duration of the timer is done by changing the value of 'i' in the "for" loop
-	for (int i = 90; i > 0; i--)
+	for (int i = 10; i > 0; i--)
 	{
-		if (i % 5 == 0)
-			cout << i << "\n";
 		sleep_for(1s);
 	}
 	cout << "DING DONG!!! DING DONG!!! Time's up!!!\n";
 }
 
-void table()
+void table(int plr)
 {
-	int plr, ctr;
-	string lst[5][20];           //first dimantion: how many players. second dimantion: how many catagories, third dimantion(if added) will be the round
-	cout << "How many players?";
-	cin >> plr;
-	cout << "How many catagories?";
-	cin >> ctr;       //parameters for later
+	string ctr[12] = { "A cuntry", "A city", "An animal", "A plant", "A object", "A name", "Food", "Drink", "A game", "A movie", "A book", "A famous person" };
+	string lst[6][12];           //first dimantion: how many players. second dimantion: how many catagories, third dimantion(if added) will be the round
 	cin.ignore();                  //To avoid the "getline" reading the last input
 	for (int x = 0; x<plr; x++)       //the player changes only after the previus player finishes
 	{
-		cout << "Player number " << x+1<<":";
-		timer();       //gives time to write the words. Optimaly it would run in the background while each player writes the words.
-		for (int i = 0; i<ctr; i++)        //changing catagory
+		std::thread t1(timer);       //gives time to write the words. Optimaly it would run in the background while each player writes the words.
+		t1.detach();
+		cout << "When the timer ends please enter '0' in the remaining catagories\n";
+		for (int i = 0; i<12; i++)        //changing catagory
 		{
+			cout << ctr[i] << ": ";
 			getline(cin, lst[x][i]);
 		}
 		system("cls");
@@ -54,7 +49,7 @@ void table()
 	for (int x = 0; x<plr; x++)                   //this part (the whole "for" loop) is for confirming evreything is writen down
 	{
 		cout << "Player number " << x + 1 << ": ";
-		for (int i = 0; i<ctr; i++)
+		for (int i = 0; i<12; i++)
 		{
 			cout << lst[x][i] << "    ";
 		}
@@ -78,20 +73,21 @@ int points()        //points gained per round
 
 int act()    //running the program
 {
-	int Points;
+	int Players, Points[6];
+	cout << "How many people are playing? (Up to six players)";
+	cin >> Players;
 	ltr();
-	table();
-	Points = points();
+	table(Players);
+	//Points = points();
 	cout << "You have earned " << Points << " this round\n\n";
-	return Points;
+	return 1;
 }
 
 int main()
 {
 	auto start = std::chrono::high_resolution_clock::now();
+	srand(time(NULL));    //gives a differant pattern of letters every time
 	int Points;
-	cout << "Starting in five seconds\n";
-	sleep_for(5s);
 	Points = act();
 	for (;;)          //inf loop
 	{
@@ -115,12 +111,12 @@ int main()
 
 /* 
    To do list:
+   -Check if the word entered is a "0", if it is, count it as none existant
    -Convert to arduino
-   -Make timer work in background of of table
+   v-Make timer work in background of of table
    -Check if words in the table (for differant players) are the same and give points accordingly
    -Check if words are actual words (connect an online dictonary?)
    -Make interface? (if possible and I have time to learn how)
    -Think of what to do with Hardwear
    -Comment rest of the code
-   -Make a point count for each player
 */
