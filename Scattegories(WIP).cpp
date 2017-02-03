@@ -20,8 +20,8 @@ void ltr()    //gives a random letter
 
 void timer()
 {
-	cout << "You got 1.5 minutes to finish\n";    //Changing the duration of the timer is done by changing the value of 'i' in the "for" loop
-	for (int i = 10; i > 0; i--)
+	cout << "You got 2 minutes to finish\n";    //Changing the duration of the timer is done by changing the value of 'i' in the "for" loop
+	for (int i = 120; i > 0; i--)
 	{
 		sleep_for(1s);
 	}
@@ -30,12 +30,12 @@ void timer()
 
 void table(int plr)
 {
-	string ctr[12] = { "A cuntry", "A city", "An animal", "A plant", "A object", "A name", "Food", "Drink", "A game", "A movie", "A book", "A famous person" };
+	string ctr[12] = { "A cuntry", "A city", "An animal", "A plant", "An object", "A name", "Food", "Drink", "A game", "A movie", "A book", "A famous person" };
 	string lst[6][12];           //first dimantion: how many players. second dimantion: how many catagories, third dimantion(if added) will be the round
 	cin.ignore();                  //To avoid the "getline" reading the last input
 	for (int x = 0; x<plr; x++)       //the player changes only after the previus player finishes
 	{
-		std::thread t1(timer);       //gives time to write the words. Optimaly it would run in the background while each player writes the words.
+		std::thread t1(timer);       //gives time to write the words. Optimaly it would finish the round for player when time is up
 		t1.detach();
 		cout << "When the timer ends please enter '0' in the remaining catagories\n";
 		for (int i = 0; i<12; i++)        //changing catagory
@@ -109,14 +109,11 @@ int main()
 	return 0;
 }
 
-/* 
-   To do list:
-   -Check if the word entered is a "0", if it is, count it as none existant
-   -Convert to arduino
-   v-Make timer work in background of of table
-   -Check if words in the table (for differant players) are the same and give points accordingly
-   -Check if words are actual words (connect an online dictonary?)
-   -Make interface? (if possible and I have time to learn how)
-   -Think of what to do with Hardwear
-   -Comment rest of the code
+/*
+To do list:
+-Make timer stop the table when time is up
+-Check if words in the table (for differant players) are the same and give points accordingly
+-Check if words are actual words (connect an online dictonary?)
+-Make interface? (if possible and I have time to learn how)
+-Comment rest of the code
 */
